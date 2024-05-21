@@ -1,0 +1,29 @@
+import csv
+from num2words import num2words
+import re
+
+# specify the input CSV file
+input_csv = "C:\\Users\\Joshua Heng\\Downloads\\Test_Novice_19May (1).csv"
+
+# specify the output CSV file
+output_csv = "C:\\Users\\Joshua Heng\\Downloads\\Test_Novice_19May (1)_modified.csv"
+
+# open the input CSV file in read mode and the output CSV file in write mode
+with open(input_csv, 'r', newline='') as infile, open(output_csv, 'w', newline='') as outfile:
+    reader = csv.reader(infile)
+    writer = csv.writer(outfile)
+
+    # write the header
+    writer.writerow(next(reader))
+
+    # process each row
+    for row in reader:
+        audio_file, transcription = row
+        # find all numbers in the transcription
+        numbers = re.findall(r'\d+', transcription)
+        # replace each number with its capitalized word representation
+        for number in numbers:
+            word = num2words(number).upper()
+            transcription = transcription.replace(number, word)
+        # write the audio file name and the modified transcription to the output CSV file
+        writer.writerow([audio_file, transcription])
